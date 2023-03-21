@@ -9,7 +9,6 @@ const UserModel = require('../model/User.model');
 class UserController {
     sign_up = async (req, res) => {
         try {
-
             const valid_error = await validationResult(req);
             if(valid_error.errors.length) {
                 res.status(200).json(send_res(false, "Request field error", valid_error));
@@ -17,6 +16,39 @@ class UserController {
             }
             
             const result = await UserModel.sign_up(req);
+            res.status(200).json(result);
+        }
+        catch (err) {
+            res.status(500).json(send_res(false, MainConfig['NODE_ERROR_MESSAGE'].server_error, null));
+        }
+    }
+
+
+    verify_user_otp = async (req, res) => {
+        try {
+            const valid_error = await validationResult(req);
+            if(valid_error.errors.length) {
+                res.status(200).json(send_res(false, "Request field error", valid_error));
+                return false;
+            }
+            
+            const result = await UserModel.verify_user_otp(req);
+            res.status(200).json(result);
+        }
+        catch (err) {
+            res.status(500).json(send_res(false, MainConfig['NODE_ERROR_MESSAGE'].server_error, null));
+        }
+    }
+
+    generate_new_otp = async (req, res) => {
+        try {
+            const valid_error = await validationResult(req);
+            if(valid_error.errors.length) {
+                res.status(200).json(send_res(false, "Request field error", valid_error));
+                return false;
+            }
+            
+            const result = await UserModel.generate_new_otp(req);
             res.status(200).json(result);
         }
         catch (err) {

@@ -13,6 +13,19 @@ class ValidatorMiddleware {
 				max: 50
 			}).bail().withMessage('password is too large!')
 	]
+
+
+	verify_user_otp = [
+		check('phone_number')
+		.not().isEmpty().bail().withMessage('Mobile number required!'),
+		check('otp')
+		.not().isEmpty().bail().withMessage('Otp required!'),
+	]
+
+	generate_new_otp = [
+		check('phone_number')
+		.not().isEmpty().bail().withMessage('Mobile number required!'),
+	]
 }
 
 

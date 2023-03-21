@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise'); // node mysql query builder
+const mysql = require('mysql2/promise'); // node mysql 
 
 // includes
 const MainConfig = require('./Main.config');
