@@ -1,5 +1,5 @@
 const fast2sms = require("fast-two-sms");
-const { FAST2SMS } = require("../config");
+const MainConfig = require("../config/Main.config");
 
 
 class OtpUtil {
@@ -15,7 +15,7 @@ class OtpUtil {
     sms_otp_to_user = async ({ message, contactNumber }, next) => {
         try {
             const res = await fast2sms.sendMessage({
-                authorization: FAST2SMS,
+                authorization: MainConfig["NODE_API_KEY"],
                 message,
                 numbers: [contactNumber],
             });
