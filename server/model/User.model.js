@@ -25,10 +25,10 @@ class UserModel {
         const { phone_number, password } = req.body;
         try {
             // check if mobile number exists
-            // let [is_user_exist, data] = await this.is_user_mobile_number_exist(phone_number)
-            // if (is_user_exist) {
-            //     return send_res(false, `User Already Exist`, null);
-            // }
+            let [is_user_exist, data] = await this.is_user_mobile_number_exist(phone_number)
+            if (is_user_exist) {
+                return send_res(false, `User Already Exist`, null);
+            }
 
             let uuid = uuidv4(),
                 encryt_password = bcrypt.hashSync(password, parseInt(MainConfig["NODE_HASH_ROUND"])),
