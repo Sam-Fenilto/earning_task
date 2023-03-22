@@ -4,6 +4,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 // components
 import Loader from '../component/Loader';
 import RegisterPage from '../page/user/RegisterPage';
+import CreateFormPage from '../page/form/CreateFormPage';
 
 
 
@@ -12,7 +13,7 @@ function MainRoute() {
         <Suspense fallback={<Loader />} >
             <Routes>
             <Route path='/register' element={<RegisterPage />} />
-            <Route path='/create_form' element={<RegisterPage />} />
+            <Route path='/create_form' element={<CreateFormPage />} />
 
                 {/* Wild Routes */}
                 <Route path='/' element={<Navigate to="/register" replace={true} />} />

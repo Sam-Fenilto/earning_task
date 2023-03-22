@@ -10,7 +10,7 @@ function RegisterPage(props) {
     });
     const [formError, setFormError] = useState({});
     const [showOtp, setShowOtp] = useState(false);
-    const [otp, setOtp] = useState(0);
+    const [otp, setOtp] = useState('');
     const [serverErrorMessage, setServerErrorMessage] = useState("");
     const [serverSuccessMessage, setServerSuccessMessage] = useState("");
 
@@ -41,8 +41,15 @@ function RegisterPage(props) {
         return error_data;
     }
 
-    const submitData = (data) => {
+
+    const clearStates = () => {
         setFormError({});
+        setServerErrorMessage("");
+        setServerSuccessMessage("");
+    }
+
+    const submitData = (data) => {
+        clearStates();
         const validate = validateData(data);
         if (Object.keys(validate)?.length) {
             setFormError(validate);
@@ -53,23 +60,28 @@ function RegisterPage(props) {
             if (response.data?.valid) {
                 setShowOtp(true);
                 setServerSuccessMessage(response.data?.message)
+            } else {
+                setServerErrorMessage(response.data?.message)
             }
         })
     }
 
     const submitOtp = (otp, phone_number) => {
-        setFormError({})
+        clearStates();
         if (otp === "" || otp === null || otp === undefined) {
             setFormError({ otp_error: "Otp cannot be empty" });
         }
-
         let data = {
             otp: otp,
             phone_number: phone_number
         }
         api.post('/user/verify_user_otp', data).then((response) => {
             if (response.data?.valid) {
+                setShowOtp(true);
+                setServerSuccessMessage(response.data?.message)
                 navigate('/create_form');
+            } else {
+                setServerErrorMessage(response.data?.message)
             }
         })
 
@@ -94,7 +106,7 @@ function RegisterPage(props) {
                                         {
                                             serverErrorMessage !== "" ? (
                                                 <div class="alert alert-danger" role="alert">
-                                                    A simple danger alert—check it out!
+                                                    {serverErrorMessage}
                                                 </div>
                                             ) : null
                                         }
@@ -107,8 +119,8 @@ function RegisterPage(props) {
                                                             <div className="d-flex flex-row align-items-center mb-4">
                                                                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                                 <div className="form-outline flex-fill mb-0">
-                                                                    <input type="email" id="form3Example3c" className="form-control" name='otp' value={otp} onChange={handleOtpChange} />
-                                                                    <label className="form-label" for="form3Example3c">Enter OTP</label>
+                                                                    <input type="email" id="otp" className="form-control" name='otp' value={otp} onChange={handleOtpChange} />
+                                                                    <label className="form-label" htmlFor="otp">Enter OTP</label>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
@@ -123,15 +135,15 @@ function RegisterPage(props) {
                                                             <div className="d-flex flex-row align-items-center mb-4">
                                                                 <i className="fas fa-envelope fa-lg me-3 fa-fw"></i>
                                                                 <div className="form-outline flex-fill mb-0">
-                                                                    <input type="email" id="form3Example3c" className="form-control" name='phone_number' value={userData?.phone_number} onChange={handleInputChange} />
-                                                                    <label className="form-label" for="form3Example3c">Mobile Number</label>
+                                                                    <input type="email" id="phone_number" className="form-control" name='phone_number' value={userData?.phone_number} onChange={handleInputChange} />
+                                                                    <label className="form-label" htmlFor="phone_number">Mobile Number</label>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex flex-row align-items-center mb-4">
                                                                 <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                                 <div className="form-outline flex-fill mb-0">
-                                                                    <input type="password" id="form3Example4c" className="form-control" name='password' value={userData?.password} onChange={handleInputChange} />
-                                                                    <label className="form-label" for="form3Example4c">Password</label>
+                                                                    <input type="password" id="password" className="form-control" name='password' value={userData?.password} onChange={handleInputChange} />
+                                                                    <label className="form-label" htmlFor="password">Password</label>
                                                                 </div>
                                                             </div>
                                                             <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
