@@ -28,7 +28,7 @@ Routes
 
 # server
 Routes
-- /user/sign_up
+- /user/sign_up [POST]
    ```
    req json:
    {
@@ -59,7 +59,7 @@ Routes
 	"force_logout": 0
     }
    ```
-- /user/verify_user_otp
+- /user/verify_user_otp [POST]
      ```
    req json:
    {
