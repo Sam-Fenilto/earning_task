@@ -146,8 +146,9 @@ function RegisterPage(props) {
                                                                     <label className="form-label" htmlFor="password">Password</label>
                                                                 </div>
                                                             </div>
-                                                            <div className="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                                                                <button type="button" className="btn btn-primary btn-lg" onClick={() => submitData(userData)}>Register</button>
+                                                            <div className="d-flex justify-content-between mx-4 mb-3 mb-lg-4">
+                                                                <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate('/form_list')}>Form List</button>
+                                                                <button type="button" className="btn btn-success btn-lg" onClick={() => submitData(userData)}>Register</button>
                                                             </div>
                                                         </form>
                                                     </>

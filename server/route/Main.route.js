@@ -3,7 +3,8 @@ const router = express.Router();
 const {send_res} = require('../util/Common.util')
 
 
-const UserRoute = require('./User.route')
+const UserRoute = require('./User.route');
+const FormRoute = require('./Form.route');
 
 // index route
 router.get("/", (req, res) => {
@@ -12,5 +13,6 @@ router.get("/", (req, res) => {
 
 
 router.use('/user', UserRoute);
+router.use('/form', FormRoute);
 
 module.exports = router;

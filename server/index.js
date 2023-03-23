@@ -1,6 +1,7 @@
 const express = require("express"); //main frame
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const fileUpload = require('express-fileupload');
 require("dotenv").config();
 
 // includes
@@ -18,6 +19,7 @@ const corsOptions = {
 }
 
 // middlewares
+app.use('/static', express.static('public'))
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(bodyParser.json({
@@ -28,6 +30,7 @@ app.use(bodyParser.urlencoded({
     extended: true,
     limit: '50mb'
 }));
+app.use(fileUpload());
 
 //  app routes
 app.use("/api/v1", MainRoute);
