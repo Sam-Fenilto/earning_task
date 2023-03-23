@@ -21,7 +21,6 @@ const corsOptions = {
 // middlewares
 app.use('/static', express.static('public'))
 app.use(cors(corsOptions));
-app.use(express.json());
 app.use(bodyParser.json({
     limit: '50mb'
 }));

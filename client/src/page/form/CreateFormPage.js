@@ -15,14 +15,18 @@ function CreateFormPage(props) {
         is_terms_accepted: false
     });
     const [searchParams, setSearchParams] = useSearchParams();
-	const form_id = searchParams.get('form_id');
-    const [imageData, setImageData] = useState();
+    const form_id = searchParams.get('form_id');
+    const [imageData, setImageData] = useState({
+        original_file_name: '',
+        image_base: '',
+        image_extension: ''
+    });
 
     const [serverErrorMessage, setServerErrorMessage] = useState("");
     const [serverSuccessMessage, setServerSuccessMessage] = useState("");
 
     useEffect(() => {
-        if(form_id) {
+        if (form_id) {
             getFormData(form_id);
         }
     }, [])
@@ -30,9 +34,25 @@ function CreateFormPage(props) {
 
     const changeImage = (event) => {
         let image_file = event.target.files[0];
+        console.log(image_file)
+        let image_extension = image_file.type.split('/')[1];
+        let original_file_name = image_file.name;
 
         if (CommonUtil.is_image_1000px) {
-            setImageData(image_file);
+            var reader = new FileReader();
+            reader.readAsDataURL(image_file);
+            reader.onload = function () {
+                setImageData({
+                    original_file_name: original_file_name,
+                    image_base: reader.result,
+                    image_extension: image_extension
+                });
+                return true;
+            };
+            reader.onerror = function (error) {
+                console.log('Error: ', error);
+            };
+
         } else {
             setServerErrorMessage("The image must be min 1000px width")
         }
@@ -63,20 +83,15 @@ function CreateFormPage(props) {
 
     const formSubmit = () => {
         clearStates();
-        const data = new FormData();
-        data.append("image_data", imageData);
-        for (const key in formData) {
-            data.append(key, formData[key]);
+        let data = {
+            ...formData,
+            ...imageData
+        };
+        if (form_id) {
+            data['form_uuid'] = form_id
         }
-        if(form_id){
-            data.append('form_uuid', form_id)
-        }
-       
-        api.post('/form/create_form', data, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        }).then((response) => {
+
+        api.post('/form/create_form', data).then((response) => {
             if (response.data?.valid) {
                 setServerSuccessMessage(response.data?.message)
             } else {
@@ -101,6 +116,11 @@ function CreateFormPage(props) {
                     price: response.data.data[0].price,
                     is_terms_accepted: response.data.data[0].is_terms_accepted == 'Y' ? true : false,
                     original_file_name: response.data.data[0].original_file_name
+                })
+                setImageData({
+                    original_file_name: response.data.data[0].original_file_name,
+                    image_base: response.data.data[0].image_base,
+                    image_extension: response.data.data[0].image_extension,
                 })
             }
         })
@@ -147,7 +167,7 @@ function CreateFormPage(props) {
                                                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" for="image_description">Image Description</label>
-                                                            <textarea type="password" id="image_description" className="form-control" name='image_description'  value={formData.image_description} onChange={handleChange} />
+                                                            <textarea type="password" id="image_description" className="form-control" name='image_description' value={formData.image_description} onChange={handleChange} />
 
                                                         </div>
                                                     </div>
@@ -155,14 +175,15 @@ function CreateFormPage(props) {
                                                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" for="form3Example4c">{form_id ? `Current Image : ${formData.original_file_name}` : `Image File`}</label>
-                                                            <input type="file" id="form3Example4c" className="form-control" name='image_data'   onChange={changeImage} />
+                                                            <input type="file" id="form3Example4c" className="form-control" name='image_data' onChange={changeImage} />
+                                                            <img width={"300px"} src={imageData} />
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-row align-items-center mb-4">
                                                         <i className="fas fa-lock fa-lg me-3 fa-fw"></i>
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" for="category_id">Category</label>
-                                                            <select id="category_id" className="form-control" name='category_id'  value={formData.category_id} onChange={handleChange} >
+                                                            <select id="category_id" className="form-control" name='category_id' value={formData.category_id} onChange={handleChange} >
                                                                 <option value='1'>People</option>
                                                                 <option value='2'>Tech</option>
                                                                 <option value='3'>Entertainment</option>
@@ -199,7 +220,7 @@ function CreateFormPage(props) {
                                                     </div>
 
                                                     <div className="d-flex justify-content-between mx-4 mb-3 mb-lg-4">
-                                                    <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate('/form_list')}>Form List</button>
+                                                        <button type="button" className="btn btn-primary btn-lg" onClick={() => navigate('/form_list')}>Form List</button>
                                                         <button type="button" className="btn btn-primary btn-lg" onClick={formSubmit}>Submit</button>
                                                     </div>
                                                 </form>

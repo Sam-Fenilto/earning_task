@@ -1,4 +1,5 @@
 
+
 # Client
 
 Routes
@@ -24,8 +25,25 @@ Routes
             -  Item Price (Input Text)
         - No, it’s free.
     - Accept T&C (Checkbox)
-    working on it
-
+    create new form
+- /update_form
+    - Image Title (Input Text)
+    - Image Description (Input Text)
+    - Image (File Type) (Min 2000px width resolution)
+    - Category (Select Input)
+        - People
+        - Tech
+        - . Entertainment
+    - Item for Sale (Radio Button)
+        - Yes, Item for Sale
+            -  Item Price (Input Text)
+        - No, it’s free.
+    - Accept T&C (Checkbox)
+    update form
+- /form_list
+    - has edit and delete button 
+    - list of all form created
+		
 # server
 Routes
 - /user/sign_up [POST]
@@ -89,5 +107,40 @@ Routes
 	"message": "Please enter a valid otp!",
 	"data": null,
 	"force_logout": 0
+    }
+   ```
+- /form/create_form [POST] | update form pass form_uuid: uuid
+    ```
+    req json:
+   {
+    category_id: "2",
+        image_description: "asdasdasd",
+            image_extension: "jpeg",
+                image_title: "asdasd",
+                    is_price_avaliable: "true",
+                        is_terms_accepted: true,
+        original_file_name:"pexels-michael-spadoni-813465.jpg"
+    price: "123"
+    }
+   ```
+- /form/form_list [GET]
+    ```
+    req json:
+   {
+
+    }
+   ```
+- /form/delete_form [DELETE]
+    ```
+    req json:
+    {
+        form_uuid: uuid
+    }
+   ```
+- /form/get_form [GET]
+    ```
+    req json:
+    {
+        form_uuid: uuid
     }
    ```
