@@ -176,7 +176,7 @@ function CreateFormPage(props) {
                                                         <div className="form-outline flex-fill mb-0">
                                                             <label className="form-label" for="form3Example4c">{form_id ? `Current Image : ${formData.original_file_name}` : `Image File`}</label>
                                                             <input type="file" id="form3Example4c" className="form-control" name='image_data' onChange={changeImage} />
-                                                            <img width={"300px"} src={imageData} />
+                                                            <img width={"300px"} src={imageData?.image_base} />
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-row align-items-center mb-4">
